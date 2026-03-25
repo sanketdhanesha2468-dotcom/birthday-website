@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Website</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #passwordSlide, #gameSlide, #messageSlide { display: none; }
+        .hidden { display: none; }
+        .slide { margin: 20px 0; }
+        #ball { width: 30px; height: 30px; background-color: red; position: absolute; }
+        #paddle { width: 60px; height: 10px; background-color: blue; position: absolute; bottom: 0; }
+    </style>
+</head>
+<body>
+    <div id="passwordSlide" class="slide">
+        <h2>Enter Password</h2>
+        <input type="password" id="passwordInput" />
+        <button onclick="checkPassword()">Submit</button>
+        <p id="passwordMessage" class="hidden"></p>
+    </div>
+
+    <div id="gameSlide" class="slide">
+        <h2>Ping Pong Game</h2>
+        <div id="gameArea" style="width: 300px; height: 300px; position: relative; border: 1px solid black;">
+            <div id="ball"></div>
+            <div id="paddle" style="left: 120px;"></div>
+        </div>
+        <button onclick="startGame()">Start Game</button>
+        <p>Use the arrow keys to move the paddle.</p>
+    </div>
+
+    <div id="messageSlide" class="slide">
+        <h2>Happy Birthday!</h2>
+        <p>Wishing you a wonderful day filled with joy!</p>
+    </div>
+
+    <script>
+        const password = "birthday122";
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const message = document.getElementById('passwordMessage');
+            if (input === password) {
+                message.classList.add('hidden');
+                document.getElementById('passwordSlide').style.display = 'none';
+                document.getElementById('gameSlide').style.display = 'block';
+            } else {
+                message.classList.remove('hidden');
+                message.innerText = 'Incorrect Password';
+            }
+        }
+
+        let ballInterval;
+        function startGame() {
+            const ball = document.getElementById('ball');
+            let posX = Math.random() * 100;
+            let posY = 0;
+            ball.style.left = posX + '%';
+            ball.style.top = posY + '%';
+
+            ballInterval = setInterval(() => {
+                posY += 1;
+                ball.style.top = posY + '%';
+                if (posY > 100) {
+                    clearInterval(ballInterval);
+                    alert('Game Over!');
+                }
+            }, 100);
+            document.getElementById('gameSlide').style.display = 'none';
+            document.getElementById('messageSlide').style.display = 'block';
+        }
+
+        window.addEventListener('keydown', movePaddle);
+        function movePaddle(e) {
+            const paddle = document.getElementById('paddle');
+            let left = paddle.offsetLeft;
+            if (e.key === 'ArrowLeft' && left > 0) {
+                paddle.style.left = (left - 10) + 'px';
+            } else if (e.key === 'ArrowRight' && left < 240) {
+                paddle.style.left = (left + 10) + 'px';
+            }
+        }
+
+        document.getElementById('passwordSlide').style.display = 'block';
+    </script>
+</body>
+</html>
