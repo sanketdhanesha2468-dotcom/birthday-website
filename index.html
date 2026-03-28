@@ -244,8 +244,8 @@
         <div class="game-container">
             <div class="game-header">
                 <h2>Ping Pong Game 🏓</h2>
-                <p class="surprise-message">Score 5 points to win! 🎁</p>
-                <div class="score-display">Score: <span id="score">0</span>/5</div>
+                <p class="surprise-message">Score 2 points to win! 🎁</p>
+                <div class="score-display">Score: <span id="score">0</span>/2</div>
             </div>
             <canvas id="gameCanvas"></canvas>
         </div>
@@ -411,7 +411,7 @@
                 score++;
                 document.getElementById('score').textContent = score;
 
-                if (score >= 5) {
+                if (score >= 2) {
                     gameRunning = false;
                     triggerFireworks();
                     setTimeout(() => moveToSlide(3), 1500);
