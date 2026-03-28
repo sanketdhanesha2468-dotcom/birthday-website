@@ -80,18 +80,7 @@
             font-size: 1.5em;
             font-weight: bold;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            min-width: 120px;
-            animation: passwordPulse 1s ease-in-out infinite;
             z-index: 1000;
-        }
-
-        @keyframes passwordPulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
         }
 
         #passwordInput {
@@ -102,14 +91,6 @@
             border-radius: 10px;
             font-size: 1.1em;
             text-align: center;
-            letter-spacing: 3px;
-            transition: all 0.3s ease;
-        }
-
-        #passwordInput:focus {
-            outline: none;
-            border-color: #ff1493;
-            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
         }
 
         .password-container button {
@@ -122,12 +103,6 @@
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .password-container button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
         }
 
         .error {
@@ -153,24 +128,12 @@
         .game-header h2 {
             color: #ff69b4;
             font-size: 2em;
-            margin-bottom: 10px;
         }
 
         .surprise-message {
             color: #ff1493;
             font-size: 1.2em;
             font-weight: bold;
-            margin-bottom: 10px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
         }
 
         .score-display {
@@ -180,16 +143,14 @@
             margin-top: 10px;
         }
 
-        #pongCanvas {
+        #gameCanvas {
             display: block;
             margin: 0 auto;
-            background: #2c3e50;
+            background: #1a1a2e;
             border-radius: 10px;
-            cursor: none;
             width: 100%;
             max-width: 800px;
             height: auto;
-            touch-action: none;
         }
 
         .birthday-message {
@@ -221,19 +182,15 @@
         }
 
         .emoji {
-            font-style: normal;
-            font-weight: normal;
-            margin-left: 10px;
-            display: inline-block;
             animation: emojiFloat 2s ease-in-out infinite;
         }
 
         @keyframes emojiFloat {
             0%, 100% {
-                transform: translateY(0) rotate(0deg);
+                transform: translateY(0);
             }
             50% {
-                transform: translateY(-20px) rotate(5deg);
+                transform: translateY(-20px);
             }
         }
 
@@ -241,7 +198,6 @@
             font-size: 1.8em;
             color: #555;
             margin-bottom: 50px;
-            line-height: 1.6;
         }
 
         .play-again-btn {
@@ -253,57 +209,6 @@
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .play-again-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .password-display {
-                top: 15px;
-                right: 15px;
-                padding: 10px 15px;
-                font-size: 1em;
-            }
-
-            .password-container {
-                padding: 40px 20px;
-            }
-
-            #birthdayTitle {
-                font-size: 2em;
-            }
-
-            #birthdaySubtitle {
-                font-size: 1.3em;
-            }
-
-            .game-container {
-                padding: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .password-container {
-                padding: 30px 15px;
-                max-width: 90%;
-            }
-
-            #birthdayTitle {
-                font-size: 1.5em;
-            }
-
-            #birthdaySubtitle {
-                font-size: 1em;
-            }
-
-            #pongCanvas {
-                max-width: 100%;
-            }
         }
     </style>
 </head>
@@ -313,7 +218,7 @@
         <div class="password-container">
             <h1>Enter Password</h1>
             <p class="hint">Check the top right side 👆</p>
-            <div class="password-display"><span id="passwordDisplay">1234</span></div>
+            <div class="password-display"><span>1234</span></div>
             <input type="password" id="passwordInput" placeholder="Enter password" maxlength="4">
             <button onclick="checkPassword()">Submit</button>
             <p id="errorMsg" class="error"></p>
@@ -325,18 +230,18 @@
         <div class="game-container">
             <div class="game-header">
                 <h2>Ping Pong Game 🏓</h2>
-                <p class="surprise-message">There is a surprise as you score 5 points! 🎁</p>
+                <p class="surprise-message">Score 5 points to win! 🎁</p>
                 <div class="score-display">Score: <span id="score">0</span>/5</div>
             </div>
-            <canvas id="pongCanvas" width="800" height="400"></canvas>
+            <canvas id="gameCanvas" width="800" height="400"></canvas>
         </div>
     </div>
 
     <!-- Birthday Slide -->
     <div id="slide3" class="slide">
         <div class="birthday-message">
-            <h1 id="birthdayTitle">Happy Birthday dear Priya<span class="emoji">🎉🍰</span></h1>
-            <h2 id="birthdaySubtitle">Let God bless you and help you to achieve what you want in your life<span class="emoji">😊</span></h2>
+            <h1 id="birthdayTitle">Happy Birthday dear Priya <span class="emoji">🎉🍰</span></h1>
+            <h2 id="birthdaySubtitle">Let God bless you and help you to achieve what you want in your life <span class="emoji">😊</span></h2>
             <button onclick="playAgain()" class="play-again-btn">Play Again!</button>
         </div>
     </div>
@@ -346,7 +251,7 @@
     </audio>
 
     <script>
-        // ====== PASSWORD SECTION ======
+        // PASSWORD FUNCTIONS
         function checkPassword() {
             const input = document.getElementById('passwordInput').value;
             const errorMsg = document.getElementById('errorMsg');
@@ -354,34 +259,16 @@
             if (input === '1234') {
                 errorMsg.textContent = '';
                 moveToSlide(2);
-                initGame();
+                startGameNow();
             } else {
-                errorMsg.textContent = '❌ Wrong password! Try again.';
+                errorMsg.textContent = '❌ Wrong password!';
                 document.getElementById('passwordInput').value = '';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const passwordInput = document.getElementById('passwordInput');
-            if (passwordInput) {
-                passwordInput.addEventListener('keypress', function(event) {
-                    if (event.key === 'Enter') {
-                        checkPassword();
-                    }
-                });
-                passwordInput.focus();
-            }
-        });
-
-        // ====== SLIDE NAVIGATION ======
-        function moveToSlide(slideNumber) {
-            document.querySelectorAll('.slide').forEach(slide => {
-                slide.classList.remove('active');
-            });
-            const slide = document.getElementById(`slide${slideNumber}`);
-            if (slide) {
-                slide.classList.add('active');
-            }
+        function moveToSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + n).classList.add('active');
         }
 
         function playAgain() {
@@ -391,164 +278,129 @@
             document.getElementById('passwordInput').focus();
         }
 
-        // ====== MUSIC & FIREWORKS ======
-        window.addEventListener('load', function() {
-            const bgMusic = document.getElementById('bgMusic');
-            if (bgMusic) {
-                bgMusic.volume = 0.3;
-                bgMusic.play().catch(() => {
-                    console.log('Autoplay blocked');
-                });
-            }
-            
-            document.addEventListener('click', function() {
-                if (bgMusic && bgMusic.paused) {
-                    bgMusic.play();
-                }
-            }, { once: true });
-        });
-
-        function triggerFireworks() {
-            if (typeof confetti !== 'undefined') {
-                for (let i = 0; i < 3; i++) {
-                    setTimeout(() => {
-                        confetti({
-                            particleCount: 100,
-                            spread: 70,
-                            origin: { y: 0.6 }
-                        });
-                    }, i * 200);
-                }
-            }
-        }
-
-        // ====== PING PONG GAME ======
-        const canvas = document.getElementById('pongCanvas');
+        // GAME VARIABLES
+        const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        
-        let gameState = {
-            running: false,
-            score: 0,
-            paddle: {
-                x: canvas.width / 2 - 40,
-                y: canvas.height - 20,
-                width: 80,
-                height: 10,
-                speed: 7
-            },
-            ball: {
-                x: canvas.width / 2,
-                y: canvas.height / 2,
-                radius: 8,
-                speedX: 4,
-                speedY: -4
-            },
-            mouseX: canvas.width / 2,
-            touchX: null
+
+        let gameRunning = false;
+        let score = 0;
+
+        // Paddle
+        let paddle = {
+            x: 0,
+            y: 0,
+            w: 100,
+            h: 15,
+            speed: 8,
+            dx: 0
         };
 
-        function resizeCanvas() {
-            const container = canvas.parentElement;
-            const width = Math.min(800, container.clientWidth - 40);
-            canvas.width = width;
-            canvas.height = (width / 800) * 400;
+        // Ball
+        let ball = {
+            x: 0,
+            y: 0,
+            radius: 8,
+            dx: 5,
+            dy: -5,
+            speed: 6
+        };
+
+        // Mouse position
+        let mouseX = canvas.width / 2;
+
+        // Initialize game
+        function resetGame() {
+            paddle.x = canvas.width / 2 - paddle.w / 2;
+            paddle.y = canvas.height - 30;
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.dx = 5;
+            ball.dy = -5;
+            score = 0;
+            document.getElementById('score').textContent = '0';
         }
 
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // Input handlers
+        // Mouse move
         document.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
-            gameState.mouseX = e.clientX - rect.left;
+            mouseX = e.clientX - rect.left;
         });
 
+        // Touch support
         canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
             const rect = canvas.getBoundingClientRect();
-            gameState.touchX = e.touches[0].clientX - rect.left;
-        }, { passive: false });
+            mouseX = e.touches[0].clientX - rect.left;
+        });
 
-        // Draw functions
         function drawGame() {
-            // Background
-            ctx.fillStyle = '#2c3e50';
+            // Clear canvas
+            ctx.fillStyle = '#1a1a2e';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Center line
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.setLineDash([10, 10]);
-            ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, 0);
-            ctx.lineTo(canvas.width / 2, canvas.height);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            // Paddle
+
+            // Draw paddle
             ctx.fillStyle = '#ff69b4';
-            ctx.fillRect(gameState.paddle.x, gameState.paddle.y, gameState.paddle.width, gameState.paddle.height);
-            
-            // Ball
+            ctx.fillRect(paddle.x, paddle.y, paddle.w, paddle.h);
+
+            // Draw ball
             ctx.fillStyle = '#ff1493';
             ctx.beginPath();
-            ctx.arc(gameState.ball.x, gameState.ball.y, gameState.ball.radius, 0, Math.PI * 2);
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.fill();
-            
-            // Score
+
+            // Draw score
             ctx.fillStyle = 'white';
-            ctx.font = 'bold 24px Arial';
-            ctx.fillText(`Score: ${gameState.score}`, 20, 30);
+            ctx.font = '20px Arial';
+            ctx.fillText('Score: ' + score, 20, 30);
         }
 
         function updateGame() {
-            if (!gameState.running) return;
+            if (!gameRunning) return;
 
-            // Move paddle
-            const currentX = gameState.touchX !== null ? gameState.touchX : gameState.mouseX;
-            if (currentX < gameState.paddle.x && gameState.paddle.x > 0) {
-                gameState.paddle.x -= gameState.paddle.speed;
+            // Move paddle towards mouse
+            if (mouseX < paddle.x - 10) {
+                paddle.x -= paddle.speed;
+            } else if (mouseX > paddle.x + paddle.w + 10) {
+                paddle.x += paddle.speed;
             }
-            if (currentX > gameState.paddle.x + gameState.paddle.width && 
-                gameState.paddle.x < canvas.width - gameState.paddle.width) {
-                gameState.paddle.x += gameState.paddle.speed;
-            }
+
+            // Keep paddle in bounds
+            if (paddle.x < 0) paddle.x = 0;
+            if (paddle.x + paddle.w > canvas.width) paddle.x = canvas.width - paddle.w;
 
             // Move ball
-            gameState.ball.x += gameState.ball.speedX;
-            gameState.ball.y += gameState.ball.speedY;
+            ball.x += ball.dx;
+            ball.y += ball.dy;
 
-            // Wall collision
-            if (gameState.ball.x - gameState.ball.radius < 0 || 
-                gameState.ball.x + gameState.ball.radius > canvas.width) {
-                gameState.ball.speedX *= -1;
+            // Ball hitting walls
+            if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+                ball.dx = -ball.dx;
             }
-            if (gameState.ball.y - gameState.ball.radius < 0) {
-                gameState.ball.speedY *= -1;
+            if (ball.y - ball.radius < 0) {
+                ball.dy = -ball.dy;
             }
 
-            // Paddle collision
-            if (gameState.ball.y + gameState.ball.radius > gameState.paddle.y &&
-                gameState.ball.x > gameState.paddle.x &&
-                gameState.ball.x < gameState.paddle.x + gameState.paddle.width) {
-                gameState.ball.speedY *= -1;
-                gameState.score++;
-                document.getElementById('score').textContent = gameState.score;
+            // Ball hitting paddle
+            if (ball.y + ball.radius > paddle.y &&
+                ball.y - ball.radius < paddle.y + paddle.h &&
+                ball.x > paddle.x &&
+                ball.x < paddle.x + paddle.w) {
+                ball.dy = -ball.dy;
+                score++;
+                document.getElementById('score').textContent = score;
 
-                if (gameState.score >= 5) {
-                    gameState.running = false;
+                if (score >= 5) {
+                    gameRunning = false;
                     triggerFireworks();
-                    setTimeout(() => {
-                        moveToSlide(3);
-                    }, 1500);
+                    setTimeout(() => moveToSlide(3), 1500);
                 }
             }
 
-            // Ball fell
-            if (gameState.ball.y > canvas.height) {
-                gameState.ball.x = canvas.width / 2;
-                gameState.ball.y = canvas.height / 2;
-                gameState.ball.speedX = (Math.random() > 0.5 ? 1 : -1) * 4;
-                gameState.ball.speedY = -4;
+            // Ball fell down
+            if (ball.y > canvas.height) {
+                ball.x = canvas.width / 2;
+                ball.y = canvas.height / 2;
+                ball.dx = 5;
+                ball.dy = -5;
             }
         }
 
@@ -558,27 +410,38 @@
             requestAnimationFrame(gameLoop);
         }
 
-        function initGame() {
-            gameState.running = true;
-            gameState.score = 0;
-            gameState.ball.x = canvas.width / 2;
-            gameState.ball.y = canvas.height / 2;
-            gameState.ball.speedX = 4;
-            gameState.ball.speedY = -4;
-            gameState.paddle.x = canvas.width / 2 - 40;
-            document.getElementById('score').textContent = '0';
-            
-            // Make sure game loop is running
-            if (!gameLoopRunning) {
-                gameLoop();
-                gameLoopRunning = true;
+        function startGameNow() {
+            resetGame();
+            gameRunning = true;
+            gameLoop();
+        }
+
+        function triggerFireworks() {
+            if (typeof confetti !== 'undefined') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
             }
         }
 
-        let gameLoopRunning = false;
+        // Music
         window.addEventListener('load', () => {
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.3;
+            music.play().catch(() => {});
+        });
+
+        // Password input Enter key
+        document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // Start game loop on load
+        document.addEventListener('DOMContentLoaded', () => {
             gameLoop();
-            gameLoopRunning = true;
+            document.getElementById('passwordInput').focus();
         });
     </script>
 </body>
