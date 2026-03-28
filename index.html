@@ -112,45 +112,47 @@
         }
 
         .game-container {
-            width: 95%;
-            max-width: 900px;
+            width: 90vw;
+            max-width: 90vw;
+            height: 70vh;
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
         }
 
         .game-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .game-header h2 {
             color: #ff69b4;
-            font-size: 2em;
+            font-size: 1.8em;
         }
 
         .surprise-message {
             color: #ff1493;
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
         }
 
         .score-display {
-            font-size: 1.3em;
+            font-size: 1.2em;
             color: #ff69b4;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         #gameCanvas {
-            display: block;
-            margin: 0 auto;
+            flex: 1;
             background: #1a1a2e;
             border-radius: 10px;
-            width: 100%;
-            max-width: 800px;
-            height: auto;
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #ff69b4;
         }
 
         .birthday-message {
@@ -210,6 +212,18 @@
             font-weight: bold;
             cursor: pointer;
         }
+
+        @media (max-width: 768px) {
+            .game-container {
+                height: 60vh;
+            }
+            #birthdayTitle {
+                font-size: 2em;
+            }
+            #birthdaySubtitle {
+                font-size: 1.3em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -233,7 +247,7 @@
                 <p class="surprise-message">Score 5 points to win! 🎁</p>
                 <div class="score-display">Score: <span id="score">0</span>/5</div>
             </div>
-            <canvas id="gameCanvas" width="800" height="400"></canvas>
+            <canvas id="gameCanvas"></canvas>
         </div>
     </div>
 
@@ -259,7 +273,7 @@
             if (input === '1234') {
                 errorMsg.textContent = '';
                 moveToSlide(2);
-                startGameNow();
+                setTimeout(startGameNow, 100);
             } else {
                 errorMsg.textContent = '❌ Wrong password!';
                 document.getElementById('passwordInput').value = '';
@@ -289,29 +303,38 @@
         let paddle = {
             x: 0,
             y: 0,
-            w: 100,
-            h: 15,
-            speed: 8,
-            dx: 0
+            w: 0,
+            h: 20,
+            speed: 8
         };
 
         // Ball
         let ball = {
             x: 0,
             y: 0,
-            radius: 8,
+            radius: 10,
             dx: 5,
-            dy: -5,
-            speed: 6
+            dy: -5
         };
 
         // Mouse position
-        let mouseX = canvas.width / 2;
+        let mouseX = 0;
+
+        // Set canvas size
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width - 4;
+            canvas.height = rect.height - 4;
+            
+            paddle.w = canvas.width / 8;
+            paddle.y = canvas.height - 30;
+            
+            resetGame();
+        }
 
         // Initialize game
         function resetGame() {
             paddle.x = canvas.width / 2 - paddle.w / 2;
-            paddle.y = canvas.height - 30;
             ball.x = canvas.width / 2;
             ball.y = canvas.height / 2;
             ball.dx = 5;
@@ -349,7 +372,7 @@
 
             // Draw score
             ctx.fillStyle = 'white';
-            ctx.font = '20px Arial';
+            ctx.font = 'bold 20px Arial';
             ctx.fillText('Score: ' + score, 20, 30);
         }
 
@@ -411,9 +434,8 @@
         }
 
         function startGameNow() {
-            resetGame();
+            resizeCanvas();
             gameRunning = true;
-            gameLoop();
         }
 
         function triggerFireworks() {
@@ -442,6 +464,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             gameLoop();
             document.getElementById('passwordInput').focus();
+        });
+
+        // Resize on window resize
+        window.addEventListener('resize', () => {
+            if (gameRunning) resizeCanvas();
         });
     </script>
 </body>
