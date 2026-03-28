@@ -3,86 +3,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Website</title>
+    <title>Happy Birthday Priya! 🎉</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; }
-        #passwordSlide, #gameSlide, #messageSlide { display: none; }
-        .hidden { display: none; }
-        .slide { margin: 20px 0; }
-        #ball { width: 30px; height: 30px; background-color: red; position: absolute; }
-        #paddle { width: 60px; height: 10px; background-color: blue; position: absolute; bottom: 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff69b4 0%, #ffb6d9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* PASSWORD SLIDE */
+        .password-container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-container h1 {
+            color: #ff69b4;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .password-container .hint {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .password-display {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff69b4 0%, #ffb6d9 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            min-width: 120px;
+            animation: passwordPulse 1s ease-in-out infinite;
+            z-index: 1000;
+        }
+
+        @keyframes passwordPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        #passwordInput {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+        }
+
+        #passwordInput:focus {
+            outline: none;
+            border-color: #ff1493;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+        }
+
+        .password-container button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff69b4 0%, #ffb6d9 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+        }
+
+        .password-container button:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            color: #ff1493;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* GAME SLIDE */
+        .game-container {
+            width: 95%;
+            max-width: 900px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-header h2 {
+            color: #ff69b4;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .surprise-message {
+            color: #ff1493;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .score-display {
+            font-size: 1.3em;
+            color: #ff69b4;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #pongCanvas {
+            display: block;
+            margin: 0 auto;
+            background: #2c3e50;
+            border-radius: 10px;
+            cursor: none;
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            touch-action: none;
+        }
+
+        /* BIRTHDAY MESSAGE SLIDE */
+        .birthday-message {
+            text-align: center;
+            animation: birthdayAppear 1s ease-out;
+            padding: 20px;
+        }
+
+        @keyframes birthdayAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        #birthdayTitle {
+            font-size: 3.5em;
+            font-weight: bold;
+            font-style: italic;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+        }
+
+        .emoji {
+            font-style: normal;
+            font-weight: normal;
+            margin-left: 10px;
+            display: inline-block;
+            animation: emojiFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes emojiFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        #birthdaySubtitle {
+            font-size: 1.8em;
+            color: #555;
+            margin-bottom: 50px;
+            line-height: 1.6;
+        }
+
+        .play-again-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #ff69b4 0%, #ffb6d9 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-again-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .password-display {
+                top: 15px;
+                right: 15px;
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+
+            .password-container {
+                padding: 40px 20px;
+            }
+
+            #birthdayTitle {
+                font-size: 2em;
+            }
+
+            #birthdaySubtitle {
+                font-size: 1.3em;
+            }
+
+            .game-container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .password-container {
+                padding: 30px 15px;
+                max-width: 90%;
+            }
+
+            #birthdayTitle {
+                font-size: 1.5em;
+            }
+
+            #birthdaySubtitle {
+                font-size: 1em;
+            }
+
+            #pongCanvas {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="passwordSlide" class="slide">
-        <h2>Enter Password</h2>
-        <input type="password" id="passwordInput" />
-        <button onclick="checkPassword()">Submit</button>
-        <p id="passwordMessage" class="hidden"></p>
-    </div>
-
-    <div id="gameSlide" class="slide">
-        <h2>Ping Pong Game</h2>
-        <div id="gameArea" style="width: 300px; height: 300px; position: relative; border: 1px solid black;">
-            <div id="ball"></div>
-            <div id="paddle" style="left: 120px;"></div>
+    <!-- Password Slide -->
+    <div id="slide1" class="slide active">
+        <div class="password-container">
+            <h1>Enter Password</h1>
+            <p class="hint">Check the top right side 👆</p>
+            <div class="password-display"><span id="passwordDisplay">1234</span></div>
+            <input type="password" id="passwordInput" placeholder="Enter password" maxlength="4">
+            <button onclick="checkPassword()">Submit</button>
+            <p id="errorMsg" class="error"></p>
         </div>
-        <button onclick="startGame()">Start Game</button>
-        <p>Use the arrow keys to move the paddle.</p>
     </div>
 
-    <div id="messageSlide" class="slide">
-        <h2>Happy Birthday!</h2>
-        <p>Wishing you a wonderful day filled with joy!</p>
+    <!-- Game Slide -->
+    <div id="slide2" class="slide">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>Ping Pong Game 🏓</h2>
+                <p class="surprise-message">There is a surprise as you score 5 points! 🎁</p>
+                <div class="score-display">Score: <span id="score">0</span>/5</div>
+            </div>
+            <canvas id="pongCanvas" width="800" height="400"></canvas>
+        </div>
     </div>
 
+    <!-- Birthday Slide -->
+    <div id="slide3" class="slide">
+        <div class="birthday-message">
+            <h1 id="birthdayTitle">Happy Birthday dear Priya<span class="emoji">🎉🍰</span></h1>
+            <h2 id="birthdaySubtitle">Let God bless you and help you to achieve what you want in your life<span class="emoji">😊</span></h2>
+            <button onclick="playAgain()" class="play-again-btn">Play Again!</button>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://assets.mixkit.co/active_storage/sfx/2733/2733-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="game.js"></script>
     <script>
-        const password = "birthday122";
+        // Password Check
         function checkPassword() {
             const input = document.getElementById('passwordInput').value;
-            const message = document.getElementById('passwordMessage');
-            if (input === password) {
-                message.classList.add('hidden');
-                document.getElementById('passwordSlide').style.display = 'none';
-                document.getElementById('gameSlide').style.display = 'block';
+            const errorMsg = document.getElementById('errorMsg');
+            
+            if (input === '1234') {
+                errorMsg.textContent = '';
+                moveToSlide(2);
+                startGame();
             } else {
-                message.classList.remove('hidden');
-                message.innerText = 'Incorrect Password';
+                errorMsg.textContent = '❌ Wrong password! Try again.';
+                document.getElementById('passwordInput').value = '';
             }
         }
 
-        let ballInterval;
-        function startGame() {
-            const ball = document.getElementById('ball');
-            let posX = Math.random() * 100;
-            let posY = 0;
-            ball.style.left = posX + '%';
-            ball.style.top = posY + '%';
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('passwordInput');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        checkPassword();
+                    }
+                });
+                passwordInput.focus();
+            }
+        });
 
-            ballInterval = setInterval(() => {
-                posY += 1;
-                ball.style.top = posY + '%';
-                if (posY > 100) {
-                    clearInterval(ballInterval);
-                    alert('Game Over!');
+        // Slide Navigation
+        function moveToSlide(slideNumber) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            const slide = document.getElementById(`slide${slideNumber}`);
+            if (slide) {
+                slide.classList.add('active');
+            }
+        }
+
+        // Play Again
+        function playAgain() {
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('errorMsg').textContent = '';
+            moveToSlide(1);
+            document.getElementById('passwordInput').focus();
+        }
+
+        // Music Control
+        window.addEventListener('load', function() {
+            const bgMusic = document.getElementById('bgMusic');
+            if (bgMusic) {
+                bgMusic.volume = 0.3;
+                bgMusic.play().catch(() => {
+                    console.log('Autoplay blocked');
+                });
+            }
+            
+            document.addEventListener('click', function() {
+                if (bgMusic && bgMusic.paused) {
+                    bgMusic.play();
                 }
-            }, 100);
-            document.getElementById('gameSlide').style.display = 'none';
-            document.getElementById('messageSlide').style.display = 'block';
-        }
+            }, { once: true });
+        });
 
-        window.addEventListener('keydown', movePaddle);
-        function movePaddle(e) {
-            const paddle = document.getElementById('paddle');
-            let left = paddle.offsetLeft;
-            if (e.key === 'ArrowLeft' && left > 0) {
-                paddle.style.left = (left - 10) + 'px';
-            } else if (e.key === 'ArrowRight' && left < 240) {
-                paddle.style.left = (left + 10) + 'px';
+        // Fireworks Animation
+        function triggerFireworks() {
+            if (typeof confetti !== 'undefined') {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    }, i * 200);
+                }
             }
         }
 
-        document.getElementById('passwordSlide').style.display = 'block';
+        // Game Variables
+        let gameActive = true;
+
+        function startGame() {
+            gameActive = true;
+            document.getElementById('score').textContent = '0';
+        }
     </script>
 </body>
 </html>
